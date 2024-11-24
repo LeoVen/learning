@@ -1,0 +1,39 @@
+services:
+  backend:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    ports:
+      - 4000:4000
+    env_file:
+      - path: .env
+        required: true
+
+  kcdb:
+    build:
+      context: ./docker/postgresql
+    ports:
+      - 5433:5432
+    env_file:
+      - path: .env
+        required: true
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 80s
+
+  keycloak:
+    build:
+      context: ./docker/keycloak
+    command: start-dev
+    env_file:
+      - path: .env
+        required: true
+    ports:
+      - 8080:8080
+    depends_on:
+      kcdb:
+        condition: service_healthy
