@@ -1,0 +1,6 @@
+env = "dev"
+
+[proxy]
+name = "backend"
+port = 3000
+upstreams = ["service1:8080", "service2:8080", "service3:8080", "service4:8080"]

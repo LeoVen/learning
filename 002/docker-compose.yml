@@ -1,0 +1,50 @@
+services:
+  proxy:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=proxy
+        - CONFIG_PATH=/config.toml
+    ports:
+      - 5050:3000
+    depends_on:
+      - service1
+      - service2
+      - service3
+      - service4
+
+  service1:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    environment:
+      SERVICE_NAME: backend
+      COPY: "1"
+
+  service2:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    environment:
+      SERVICE_NAME: backend
+      COPY: "2"
+
+  service3:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    environment:
+      SERVICE_NAME: backend
+      COPY: "3"
+
+  service4:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    environment:
+      SERVICE_NAME: backend
+      COPY: "4"
