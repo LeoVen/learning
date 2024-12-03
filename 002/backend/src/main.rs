@@ -1,5 +1,6 @@
 pub mod api;
 pub mod health;
+pub mod metrics;
 
 use std::net::Ipv4Addr;
 use std::net::SocketAddrV4;
@@ -34,11 +35,13 @@ async fn main() -> anyhow::Result<()> {
     let cfg = envy::from_env::<ServiceConfig>()?;
 
     let trace_layer = TraceLayer::new_for_http();
+    let metrics = metrics::setup()?;
 
     let app = Router::new()
         .layer(trace_layer)
         .merge(health::router(&cfg.service_name))
-        .merge(api::router(&cfg.copy));
+        .merge(api::router(&cfg.copy, metrics))
+        .merge(metrics::router());
 
     let listener = TcpListener::bind(SocketAddrV4::new(Ipv4Addr::new(0, 0, 0, 0), 8080)).await?;
 

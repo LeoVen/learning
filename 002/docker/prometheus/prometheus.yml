@@ -1,0 +1,12 @@
+global:
+  # scrape_interval: 10s
+
+scrape_configs:
+  - job_name: "service_scrape"
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - "service1:8080"
+          - "service2:8080"
+          - "service3:8080"
+          - "service4:8080"
