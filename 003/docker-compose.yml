@@ -1,0 +1,63 @@
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+    environment:
+      NGINX_PORT: 3000
+    ports:
+      - 4444:3000
+    depends_on:
+      - worker1
+      - worker2
+      - worker3
+      - worker4
+
+  worker1:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=worker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: "mongodb://database:27017/"
+    env_file: .env
+
+  worker2:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=worker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: "mongodb://database:27017/"
+    env_file: .env
+
+  worker3:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=worker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: "mongodb://database:27017/"
+    env_file: .env
+
+  worker4:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=worker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: "mongodb://database:27017/"
+    env_file: .env
+
+  database:
+    build:
+      context: ./docker/mongodb
+    ports:
+      - 27017:27017
