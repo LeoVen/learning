@@ -6,9 +6,9 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing;
 use axum::Router;
+use common::database::calc::CalcDatabase;
 
 use crate::config::AppConfig;
-use crate::database::calc::CalcDatabase;
 use crate::services::calc::CalcService;
 use crate::Dependencies;
 
@@ -19,9 +19,12 @@ pub struct CalcApiState {
 
 pub fn router(config: &AppConfig, deps: Dependencies) -> Router {
     Router::<Arc<CalcApiState>>::new()
-        .route("/calc/:p", routing::get(calculate_prime))
+        .route("/calc/{p}", routing::get(calculate_prime))
         .with_state(Arc::new(CalcApiState {
-            service: CalcService::new(CalcDatabase::new(config, deps.mongo)),
+            service: CalcService::new(CalcDatabase::new(
+                deps.mongo,
+                config.database_name.to_string(),
+            )),
         }))
 }
 

@@ -1,12 +1,12 @@
+use backend::Dependencies;
 use common::database::DatabaseConfig;
 use common::tracing::TracingConfig;
-use worker::Dependencies;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
 
-    let config = worker::config::load()?;
+    let config = backend::config::load()?;
 
     common::tracing::setup(&TracingConfig {
         environment: &config.environment,
@@ -17,7 +17,7 @@ async fn main() -> anyhow::Result<()> {
     })
     .await?;
 
-    worker::api::setup(&config, Dependencies { mongo: client }).await?;
+    backend::api::setup(&config, Dependencies { mongo: client }).await?;
 
     Ok(())
 }

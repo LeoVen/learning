@@ -1,10 +1,9 @@
 use std::time::Duration;
 
 use bson::DateTime;
+use common::database::calc::CalcDatabase;
+use common::model::calc::CalcEntity;
 use tokio::time::Instant;
-
-use crate::database::calc::CalcDatabase;
-use crate::model::calc::Calc;
 
 #[derive(Clone)]
 pub struct CalcService {
@@ -18,7 +17,6 @@ impl CalcService {
 
     pub fn calculate_prime(&self, p: i64) {
         let service = self.clone();
-        // TODO increment load with p
 
         tokio::spawn(async move {
             let CalcResult { sum, total, time } = naive_prime_sum_upto_p(p);
@@ -27,7 +25,7 @@ impl CalcService {
 
             let result = service
                 .db
-                .create(Calc {
+                .create(CalcEntity {
                     id: None,
                     p,
                     created_at: DateTime::now(),

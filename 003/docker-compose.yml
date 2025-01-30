@@ -12,6 +12,15 @@ services:
       - worker3
       - worker4
 
+  backend:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    environment:
+      DATABASE_URI: "mongodb://database:27017/"
+    env_file: .env
+
   worker1:
     build:
       context: .

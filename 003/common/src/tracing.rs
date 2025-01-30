@@ -4,9 +4,11 @@ use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
 use tracing_subscriber::Layer;
 
-use crate::config::AppConfig;
+pub struct TracingConfig<'a> {
+    pub environment: &'a str,
+}
 
-pub fn setup(config: &AppConfig) {
+pub fn setup(config: &TracingConfig) {
     if config.environment == "dev" {
         tracing_subscriber::registry()
             .with(fmt::layer().with_filter(LevelFilter::DEBUG))
