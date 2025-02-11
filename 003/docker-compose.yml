@@ -70,3 +70,8 @@ services:
       context: ./docker/mongodb
     ports:
       - 27017:27017
+    volumes:
+      - mongodb003:/data/db
+
+volumes:
+  mongodb003:

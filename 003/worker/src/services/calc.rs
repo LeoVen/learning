@@ -19,7 +19,21 @@ impl CalcService {
         let service = self.clone();
 
         tokio::spawn(async move {
-            let CalcResult { sum, total, time } = naive_prime_sum_upto_p(p);
+            let (send, recv) = tokio::sync::oneshot::channel();
+
+            rayon::spawn(move || {
+                let _ = send.send(naive_prime_sum_upto_p(p));
+            });
+
+            let CalcResult { sum, total, time } = match recv.await {
+                Ok(result) => result,
+                Err(error) => {
+                    let error = error.to_string();
+                    tracing::error!(error, "rayon spawn error");
+                    return;
+                }
+            };
+
             let seconds = time.as_secs();
             tracing::info!(sum, total, p, seconds, "calculated primes");
 
