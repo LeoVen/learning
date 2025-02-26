@@ -1,0 +1,73 @@
+services:
+  backend:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=backend
+    env_file:
+      - path: .env
+        required: true
+    ports:
+      - 4201:3000
+
+  worker1:
+    build:
+      context: .
+      args:
+        - BINARY_NAME=worker
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: "postgres://database:5432/"
+    env_file: .env
+
+  database:
+    build:
+      context: ./docker/postgresql
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "toor"
+      POSTGRES_DB: "root"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "db_prod"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 80s
+
+  storage:
+    build:
+      context: ./docker/minio
+    ports:
+      - "9000:9000" # minio port
+      - "9001:9001" # admin console
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=admin123
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+        interval: 30s
+        timeout: 20s
+        retries: 3
+        start_period: 5s
+    volumes:
+      - miniodata:/minio
+
+  makebucket:
+    image: minio/mc:latest
+    depends_on:
+      storage:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc config host add myminio http://storage:9000 admin admin123;
+      echo 'creating buckets';
+      mc mb myminio/file-upload;
+      echo 'buckets created';
+      exit 0;
+      "
+
+volumes:
+  miniodata:

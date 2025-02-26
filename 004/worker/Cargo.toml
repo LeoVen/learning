@@ -1,0 +1,10 @@
+[package]
+edition = "2021"
+name = "worker"
+version = "0.1.0"
+
+[dependencies]
+anyhow = { workspace = true }
+axum = { workspace = true }
+common = { workspace = true }
+tokio = { workspace = true }

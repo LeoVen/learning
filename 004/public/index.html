@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Roboto font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+        * {
+            font-family: "Roboto", serif;
+        }
+    </style>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <div style="display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh;">
+        <div style="border: 1px solid grey; padding: 10px; border-radius: 4px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <span>Upload Documents</span>
+                <div>
+                    <input id="files" type="file" multiple accept=".csv" />
+                </div>
+                <button id="submit" onclick="handleSubmit()">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        'use strict';
+        var state = {};
+
+        // https://fullstackdojo.medium.com/s3-upload-with-presigned-url-react-and-nodejs-b77f348d54cc
+        // https://stackoverflow.com/questions/62312389/upload-meta-with-a-presigned-put-object-link-on-minio
+        async function handleSubmit(event) {
+            console.log("Uploading files");
+
+            const fileList = document.getElementById("files").files;
+
+            if (fileList.length === 0) {
+                console.warn("No files to upload");
+                return;
+            }
+
+            for (const file of fileList) {
+                const file_name = `${new Date().getTime()}_${file.name}`;
+                console.log(URL.createObjectURL(file));
+
+                console.log(`Uploading ${file_name}`);
+
+                const upload = await getPresigned(file_name);
+
+                const uploadResult = await fetch(upload.uri, {
+                    method: upload.method,
+                    headers: upload.headers,
+                    body: file,
+                });
+
+                if (uploadResult.status !== 200) {
+                    console.error(uploadResult.status);
+                } else {
+                    console.log(`Uploaded ${file_name}`);
+                }
+
+            }
+        }
+
+        async function getPresigned(file_name) {
+            const result = await fetch(`${window.location}pre-signed/${file_name}`);
+
+            if (result.status !== 200) {
+                console.error(`Error, status code ${result.status}`, await result.json());
+                return;
+            }
+
+            return await result.json();
+        }
+    </script>
+</body>
+
+</html>
