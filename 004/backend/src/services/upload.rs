@@ -18,6 +18,7 @@ impl UploadService {
     }
 
     // https://docs.aws.amazon.com/AmazonS3/latest/API/s3_example_s3_Scenario_PresignedUrl_section.html
+    #[tracing::instrument(skip_all)]
     pub async fn get_presigned(&self, file_name: &str) -> anyhow::Result<PresignedRequestResult> {
         let expires_in = Duration::from_secs(100);
 

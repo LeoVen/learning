@@ -22,7 +22,11 @@ impl Storage {
             .into_builder()
             .endpoint_url("http://localhost:9000") // TODO move to config
             .build();
-        let client = aws_sdk_s3::Client::new(&config);
+        // https://docs.aws.amazon.com/sdk-for-rust/latest/dg/endpoints.html
+        let s3_config = aws_sdk_s3::config::Builder::from(&config)
+            .force_path_style(true) // This is needed because this is minio's default
+            .build();
+        let client = aws_sdk_s3::Client::from_conf(s3_config);
 
         tracing::info!("S3 Client setup");
 
@@ -38,6 +42,7 @@ impl Storage {
     ) -> anyhow::Result<PresignedRequest> {
         tracing::trace!("Get Presigned");
 
+        // https://stackoverflow.com/questions/59693471/how-to-setup-minio-server-to-use-virtual-hosted-style
         self.client
             .put_object()
             .bucket(bucket)

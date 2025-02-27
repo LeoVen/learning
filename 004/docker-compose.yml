@@ -44,8 +44,8 @@ services:
       - "9000:9000" # minio port
       - "9001:9001" # admin console
     environment:
-      - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=admin123
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
     healthcheck:
         test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
         interval: 30s

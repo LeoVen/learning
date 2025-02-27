@@ -1,4 +1,4 @@
-FROM minio/minio:latest
+FROM minio/minio:RELEASE.2025-02-18T16-25-55Z
 
 ENTRYPOINT [ "minio" ]
 

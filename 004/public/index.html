@@ -14,7 +14,7 @@
         }
     </style>
 
-    <title>Document</title>
+    <title>Document Upload</title>
 </head>
 
 <body>
@@ -23,7 +23,7 @@
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <span>Upload Documents</span>
                 <div>
-                    <input id="files" type="file" multiple accept=".csv" />
+                    <input id="files" type="file" multiple accept="image/png, image/jpg, image/jpeg" />
                 </div>
                 <button id="submit" onclick="handleSubmit()">Submit</button>
             </div>
@@ -31,11 +31,6 @@
     </div>
 
     <script type="text/javascript">
-        'use strict';
-        var state = {};
-
-        // https://fullstackdojo.medium.com/s3-upload-with-presigned-url-react-and-nodejs-b77f348d54cc
-        // https://stackoverflow.com/questions/62312389/upload-meta-with-a-presigned-put-object-link-on-minio
         async function handleSubmit(event) {
             console.log("Uploading files");
 
@@ -47,8 +42,9 @@
             }
 
             for (const file of fileList) {
-                const file_name = `${new Date().getTime()}_${file.name}`;
-                console.log(URL.createObjectURL(file));
+                const sections = file.name.split('.');
+                const extension = sections[sections.length -1];
+                const file_name = `${new Date().getTime()}.${extension}`;
 
                 console.log(`Uploading ${file_name}`);
 

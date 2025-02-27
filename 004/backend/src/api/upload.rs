@@ -29,7 +29,7 @@ pub async fn get_presigned(
     State(state): State<Arc<UploadState>>,
     Path(name): Path<String>,
 ) -> impl IntoResponse {
-    tracing::trace!(fn = "get_presigned", "API Call");
+    tracing::trace!(fn = "get_presigned", name, "API Call");
 
     match state.service.get_presigned(&name).await {
         Ok(result) => (StatusCode::OK, Json(json!(result))),
