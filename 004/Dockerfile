@@ -1,4 +1,4 @@
-FROM rust:1.84.1 AS chef
+FROM rust:1.85 AS chef
 
 RUN cargo install cargo-chef
 WORKDIR /app
@@ -26,8 +26,9 @@ RUN apt-get install -y openssl ca-certificates
 ARG BINARY_NAME
 WORKDIR /app
 
-COPY --from=builder /app/target/release/${BINARY_NAME} /usr/local/bin/rust_program
-COPY ./config/${BINARY_NAME}.conf.toml /usr/local/bin/config/${BINARY_NAME}.conf.toml
-COPY ./public /usr/local/bin/public
+COPY ./config/${BINARY_NAME}.conf.toml ./config/${BINARY_NAME}.conf.toml
+COPY ./public ./public
 
-ENTRYPOINT ["/usr/local/bin/rust_program"]
+COPY --from=builder /app/target/release/${BINARY_NAME} ./rust_program
+
+ENTRYPOINT ["/app/rust_program"]

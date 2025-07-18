@@ -1,4 +1,6 @@
-FROM rabbitmq:4.0
+FROM rabbitmq:4.0-management
 
-ENTRYPOINT [ "minio" ]
-CMD [ "server", "/data", "--address", ":9000", "--console-address", ":9001" ]
+RUN rabbitmq-plugins enable rabbitmq_management
+
+COPY ./rabbitmq.conf /etc/rabbitmq/rabbitmq.conf
+COPY ./definitions.json /etc/rabbitmq/definitions.json

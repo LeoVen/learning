@@ -1,10 +1,17 @@
 [package]
-edition = "2021"
+edition = "2024"
 name = "worker"
 version = "0.1.0"
 
 [dependencies]
 anyhow = { workspace = true }
-axum = { workspace = true }
 common = { workspace = true }
+config = { workspace = true }
+futures = { workspace = true }
+image = { workspace = true }
+lapin = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
 tokio = { workspace = true }
+tokio-util = { version = "0.7.15", features = ["io-util"] }
+tracing = { workspace = true }

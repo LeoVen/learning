@@ -7,15 +7,15 @@ use std::time::Duration;
 use std::time::SystemTime;
 
 use anyhow::Context;
+use axum::Router;
 use axum::body::Body;
 use axum::extract::MatchedPath;
 use axum::extract::Request;
 use axum::response::Response;
-use axum::Router;
 use tower_http::trace::TraceLayer;
 
-use crate::serv_config::AppConfig;
 use crate::Dependencies;
+use crate::serv_config::AppConfig;
 
 pub async fn setup(config: &AppConfig, deps: Dependencies) -> anyhow::Result<()> {
     let trace_layer = TraceLayer::new_for_http()
@@ -57,6 +57,8 @@ pub async fn setup(config: &AppConfig, deps: Dependencies) -> anyhow::Result<()>
         .merge(upload)
         .merge(files)
         .layer(trace_layer);
+
+    tracing::info!("connecting service to port {}", config.api_port);
 
     let listener = tokio::net::TcpListener::bind(SocketAddrV4::new(
         Ipv4Addr::new(0, 0, 0, 0),

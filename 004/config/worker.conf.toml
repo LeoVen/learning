@@ -1,0 +1,17 @@
+api_port = 3000
+environment = "dev"
+log_level = "info"
+
+[queue]
+host = "queue"
+pass = "queue_pass"
+port = 5672
+user = "queue_user"
+
+[queue.consumer]
+queue_name = "image_upload"
+tag = "worker"
+
+[storage]
+endpoint_url = "http://storage:9000"
+force_path_style = true

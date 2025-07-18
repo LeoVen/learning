@@ -1,2 +1,10 @@
 api_port = 3000
 environment = "dev"
+log_level = "info"
+
+[storage]
+# We don't actually use the storage directly, but the front-end needs to get a
+# signed URL to localhost because that is how it will access the storage and
+# upload the image. In a real world scenario, we would use the storage's DNS.
+endpoint_url = "http://localhost:9000"
+force_path_style = true

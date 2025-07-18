@@ -1,16 +1,16 @@
 use std::sync::Arc;
 
+use axum::Json;
+use axum::Router;
 use axum::extract::Path;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing;
-use axum::Json;
-use axum::Router;
 use serde_json::json;
 
-use crate::services::upload::UploadService;
 use crate::Dependencies;
+use crate::services::upload::UploadService;
 
 struct UploadState {
     service: UploadService,

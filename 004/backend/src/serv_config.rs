@@ -1,3 +1,4 @@
+use common::storage::StorageConfig;
 use config::Config;
 use serde::Deserialize;
 
@@ -5,6 +6,8 @@ use serde::Deserialize;
 pub struct AppConfig {
     pub api_port: u16,
     pub environment: String,
+    pub storage: StorageConfig,
+    pub log_level: String,
     // Database
     // #[serde(rename(deserialize = "database_uri"))]
     // pub database_uri: String,

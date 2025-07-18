@@ -9,5 +9,17 @@ The best way to learn it is to get your hands dirty.
 
 Upcoming ideas
 
-- XXX - Nginx proxy where upstream services have a Rate Limiter using Valkey
+- XXX - An `r/place` clone
+- XXX - Setup Keycloak with Terraform and PKCE authentication flow
+- XXX - Valkey Pub/Sub example
+- XXX - https://scrumpoker.online/ example (focus on BE, session ID and different clients, websockets?)
+- XXX - Nginx proxy as a Rate Limiter where upstream services have a socket to the FE with live updates
+    - Async updates
 - XXX - Kafka fanout example
+- XXX - OpenAPI and Docusaurus static website hosted on MinIO bucket with Nginx
+    - https://gist.github.com/harshavardhana/f05b60fe6f96803743f38bea4b565bbf
+- XXX - Logs, metrics and traces full example with OpenTelemetry collector and Grafana
+- XXX - Wikipedia Dump, stream pages to a queue for processing
+    - Maybe something to do with embedings
+- XXX - More complex Keycloak use case with Groups, Roles and Scopes
+

@@ -17,10 +17,11 @@ async fn main() -> anyhow::Result<()> {
 
     common::tracing::setup(&TracingConfig {
         environment: &config.environment,
+        log_level: &config.log_level,
     });
 
     let deps = Dependencies {
-        storage: Storage::new().await,
+        storage: Storage::new(&config.storage).await,
     };
 
     api::setup(&config, deps).await?;

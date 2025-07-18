@@ -24,7 +24,7 @@ impl UploadService {
 
         let presigned = self
             .storage
-            .get_presigned(&self.bucket, file_name, expires_in)
+            .get_presigned_put(&self.bucket, file_name, expires_in)
             .await?;
 
         Ok(PresignedRequestResult {
